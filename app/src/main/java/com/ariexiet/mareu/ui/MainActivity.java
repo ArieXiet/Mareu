@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.ariexiet.mareu.R;
 import com.ariexiet.mareu.di.DI;
@@ -24,7 +25,19 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 
 		ListMeetingFragment fragment = ListMeetingFragment.newInstance();
-		getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+		getSupportFragmentManager()
+				.beginTransaction()
+				.replace(R.id.container, fragment)
+				.addToBackStack("ListMeetingFragment")
+				.commit();
+	}
 
+	public void newMeeting(View view) {
+		NewMeetingFragment fragment = NewMeetingFragment.newInstance();
+		getSupportFragmentManager()
+				.beginTransaction()
+				.replace(R.id.container, fragment)
+				.addToBackStack("ListMeetingFragment")
+				.commit();
 	}
 }

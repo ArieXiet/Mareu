@@ -1,38 +1,41 @@
 package com.ariexiet.mareu.model;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
-public class Meeting {
-	private String mStartingTime;
-	private String mEndingTime;
+public class Meeting implements Serializable {
+	private GregorianCalendar mStartingTime;
+	private GregorianCalendar mEndDateTime;
 	private MeetingRoom mRoom;
 	private String mSubject;
 	private ArrayList<Employee> mAttendees;
 	private int mDeleteCode;
 
-	public Meeting(String startingTime, String endingTime, MeetingRoom room, String subject, ArrayList<Employee> attendees, int deleteCode) {
+	public Meeting(GregorianCalendar startingTime, GregorianCalendar endingTime, MeetingRoom room, String subject, ArrayList<Employee> attendees, int deleteCode) {
 		mStartingTime = startingTime;
-		mEndingTime = endingTime;
+		mEndDateTime = endingTime;
 		mRoom = room;
 		mSubject = subject;
 		mAttendees = attendees;
 		mDeleteCode = deleteCode;
 	}
 
-	public String getStartingTime() {
+	public GregorianCalendar getStartingTime() {
 		return mStartingTime;
 	}
 
-	public void setStartingTime(String startingTime) {
-		this.mStartingTime = startingTime;
+	public void setStartingTime(GregorianCalendar startingTime) {
+		mStartingTime = startingTime;
 	}
 
-	public String getEndingTime() {
-		return mEndingTime;
+	public GregorianCalendar getEndDateTime() {
+		return mEndDateTime;
 	}
 
-	public void setEndingTime(String endingTime) {
-		this.mEndingTime = endingTime;
+	public void setEndDateTime(GregorianCalendar endDateTime) {
+		mEndDateTime = endDateTime;
 	}
 
 	public MeetingRoom getRoom() {

@@ -6,30 +6,31 @@ import com.ariexiet.mareu.model.MeetingRoom;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 abstract class DummyMeetingGenerator {
 
-	private static Employee mJean = new Employee("Jean");
-	private static Employee mYann = new Employee("Yann");
-	private static Employee mArthur = new Employee("Arthur");
-	private static Employee mPierre = new Employee("Pierre");
-	private static Employee mStephane = new Employee("Stéphane");
-	private static Employee mMaude = new Employee("Maude");
-	private static Employee mValerie =	new Employee("Valérie");
-	private static Employee mLea = new Employee("Léa");
-	private static Employee mChloe = new Employee("Chloé");
-	private static Employee mClara = new Employee("Clara");
-	private static Employee mEmma = new Employee("Emma");
-	private static Employee mJade = new Employee("Jade");
-	private static Employee mLouise = new Employee("Louise");
-	private static Employee mAlice = new Employee("Alice");
-	private static Employee mJulie = new Employee("Julie");
-	private static Employee mLouis = new Employee("Louis");
-	private static Employee mSimon = new Employee("Simon");
-	private static Employee mSebastien = new Employee("Sébastien");
-	private static Employee mAntoine = new Employee("Antoine");
-	private static Employee mMarc = new Employee("Marc");
+	private static Employee mJean = new Employee("Jean", "jean@lamzone.com");
+	private static Employee mYann = new Employee("Yann", "yann@lamzone.com");
+	private static Employee mArthur = new Employee("Arthur", "arthur@lamzone.com");
+	private static Employee mPierre = new Employee("Pierre", "pierre@lamzone.com");
+	private static Employee mStephane = new Employee("Stéphane", "stephane@lamzone.com");
+	private static Employee mMaude = new Employee("Maude", "maude@lamzone.com");
+	private static Employee mValerie =	new Employee("Valérie", "valerie@lamzone.com");
+	private static Employee mLea = new Employee("Léa", "lea@lamzone.com");
+	private static Employee mChloe = new Employee("Chloé", "chloe@lamzone.com");
+	private static Employee mClara = new Employee("Clara", "clara@lamzone.com");
+	private static Employee mEmma = new Employee("Emma", "emma@lamzone.com");
+	private static Employee mJade = new Employee("Jade", "jade@lamzone.com");
+	private static Employee mLouise = new Employee("Louise", "louise@lamzone.com");
+	private static Employee mAlice = new Employee("Alice", "alise@lamzone.com");
+	private static Employee mJulie = new Employee("Julie", "julie@lamzone.com");
+	private static Employee mLouis = new Employee("Louis", "louis@lamzone.com");
+	private static Employee mSimon = new Employee("Simon", "simon@lamzone.com");
+	private static Employee mSebastien = new Employee("Sébastien", "sebastien@lamzone.com");
+	private static Employee mAntoine = new Employee("Antoine", "antoine@lamzone.com");
+	private static Employee mMarc = new Employee("Marc", "marc@lamzone.com");
 
 	private static final List<Employee> DUMMY_EmployeeS = Arrays.asList(
 			mJean, mYann, mArthur, mPierre, mStephane, mMaude, mValerie, mLea, mChloe, mClara, mEmma, mJade, mLouise, mAlice, mJulie, mLouis, mSimon, mSebastien, mAntoine, mMarc
@@ -47,19 +48,49 @@ abstract class DummyMeetingGenerator {
 	private static MeetingRoom mMeetingRoom10 = new MeetingRoom(10);
 
 
-	private static final List<Meeting> DUMMY_MeetingS = Arrays.asList(
-			new Meeting("13h","13h45mn", mMeetingRoom1, "Blah", new ArrayList<>(Arrays.asList(mJade, mAlice, mAntoine)), 1234),
-			new Meeting("14h","14h50mn", mMeetingRoom2, "Blih", new ArrayList<>(Arrays.asList(mSebastien, mMarc, mMaude)), 2345),
-			new Meeting("09h","09h30mn", mMeetingRoom3, "Bleh", new ArrayList<>(Arrays.asList(mPierre, mLouis, mJulie)), 1234),
-			new Meeting("11h15","12h", mMeetingRoom4, "Bloh", new ArrayList<>(Arrays.asList(mSimon, mEmma, mValerie)), 1234),
-			new Meeting("14h20","14h55mn", mMeetingRoom5, "Bluh", new ArrayList<>(Arrays.asList(mClara, mLouise, mArthur)), 1234),
-			new Meeting("13h10","13h45mn", mMeetingRoom6, "Blauh", new ArrayList<>(Arrays.asList(mYann, mJean, mStephane)), 1234),
-			new Meeting("15h15","16h", mMeetingRoom7, "Blouh", new ArrayList<>(Arrays.asList(mLea, mChloe, mAntoine)), 1234),
-			new Meeting("10h30","11h10mn", mMeetingRoom8, "Bleih", new ArrayList<>(Arrays.asList(mJade, mSebastien, mJulie)), 1234),
-			new Meeting("13h","13h55mn", mMeetingRoom9, "Blinh", new ArrayList<>(Arrays.asList(mLea, mLouis, mClara)), 1234),
-			new Meeting("14h45","15h40mn", mMeetingRoom10, "Blanh", new ArrayList<>(Arrays.asList(mChloe, mSimon, mEmma)), 1234)
+	private static final List<Meeting> DUMMY_MEETINGS = Arrays.asList(
+			new Meeting(new GregorianCalendar(2020, 7,7,13,0),
+					new GregorianCalendar(2020,7,7,13,45),
+					mMeetingRoom1, "Blah",
+					new ArrayList<>(Arrays.asList(mJade, mAlice, mAntoine)), 1234),
+			new Meeting(new GregorianCalendar(2020, 7, 7,14, 0),
+					new GregorianCalendar(2020, 7, 7,14,50),
+					mMeetingRoom2, "Blih",
+					new ArrayList<>(Arrays.asList(mSebastien, mMarc, mMaude)), 2345),
+			new Meeting(new GregorianCalendar(2020, 7, 7,9, 0),
+					new GregorianCalendar(2020, 7, 7,9,30),
+					mMeetingRoom3, "Bleh",
+					new ArrayList<>(Arrays.asList(mPierre, mLouis, mJulie)), 3456),
+			new Meeting(new GregorianCalendar(2020, 7, 7,11,15),
+					new GregorianCalendar(2020, 7, 7,12, 0),
+					mMeetingRoom4, "Bloh",
+					new ArrayList<>(Arrays.asList(mSimon, mEmma, mValerie)), 4567),
+			new Meeting(new GregorianCalendar(2020, 7, 7,14,20),
+					new GregorianCalendar(2020, 7, 7,14,55),
+					mMeetingRoom5, "Bluh",
+					new ArrayList<>(Arrays.asList(mClara, mLouise, mArthur)), 5678),
+			new Meeting(new GregorianCalendar(2020, 7, 7,13,10),
+					new GregorianCalendar(2020, 7, 7,13,45),
+					mMeetingRoom6, "Blauh",
+					new ArrayList<>(Arrays.asList(mYann, mJean, mStephane)), 6789),
+			new Meeting(new GregorianCalendar(2020, 7, 7,15,15),
+					new GregorianCalendar(2020, 7, 7,16, 0),
+					mMeetingRoom7, "Blouh",
+					new ArrayList<>(Arrays.asList(mLea, mChloe, mAntoine)), 7890),
+			new Meeting(new GregorianCalendar(2020, 7, 7,10,30),
+					new GregorianCalendar(2020, 7, 7,11,10),
+					mMeetingRoom8, "Bleih",
+					new ArrayList<>(Arrays.asList(mJade, mSebastien, mJulie)), 8901),
+			new Meeting(new GregorianCalendar(2020, 7, 7,13, 0),
+					new GregorianCalendar(2020, 7, 7,13,55),
+					mMeetingRoom9, "Blinh",
+					new ArrayList<>(Arrays.asList(mLea, mLouis, mClara)), 9012),
+			new Meeting(new GregorianCalendar(2020, 7, 7,14,45),
+					new GregorianCalendar(2020, 7, 7,15,40),
+					mMeetingRoom10, "Blanh",
+					new ArrayList<>(Arrays.asList(mChloe, mSimon, mEmma)), 83)
 	);
 
-	static List<Employee> generateEmployees() { return new ArrayList<>(DUMMY_EmployeeS); }
-	static List<Meeting> generateMeetings() {return new ArrayList<>(DUMMY_MeetingS); }
+	static List<Employee> generateEmployees() { return DUMMY_EmployeeS; }
+	static List<Meeting> generateMeetings() {return DUMMY_MEETINGS; }
 }

@@ -2,10 +2,14 @@ package com.ariexiet.mareu.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -27,6 +31,8 @@ import java.util.Objects;
 public class ListMeetingFragment extends Fragment {
 	private MeetingApiService mApiService;
 	private RecyclerView mRecyclerView;
+	private static final String TAG = "DeleteEvent";
+	private ListMeetingRecyclerViewAdapter mAdapter;
 
 	public static ListMeetingFragment newInstance() {
 		return new ListMeetingFragment();
@@ -36,6 +42,7 @@ public class ListMeetingFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mApiService = DI.getMeetingApiService();
+		getActivity().findViewById(R.id.floatingActionButton).setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -50,12 +57,19 @@ public class ListMeetingFragment extends Fragment {
 		return view;
 	}
 
+	@Override
+	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
 	/**
 	 * Init the List of neighbours
 	 */
 	private void initList() {
+		Log.d(TAG, "DEBUG: initList: ");
 		List<Meeting> mMeetings = mApiService.getMeetings();
-		mRecyclerView.setAdapter(new ListMeetingRecyclerViewAdapter(mMeetings));
+		mAdapter = new ListMeetingRecyclerViewAdapter(mMeetings, getContext());
+		mRecyclerView.setAdapter(mAdapter);
 	}
 
 	@Override
@@ -67,17 +81,20 @@ public class ListMeetingFragment extends Fragment {
 	@Override
 	public void onStart() {
 		super.onStart();
+		Log.d(TAG, "DEBUG: onStart: register");
 		EventBus.getDefault().register(this);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
+		Log.d(TAG, "DEBUG: onStop: unregister");
 		EventBus.getDefault().unregister(this);
 	}
 
 	@Subscribe
 	public void onDeleteMeeting(DeleteMeetingEvent event) {
+		Log.d(TAG, "DEBUG: onDeleteMeeting");
 		mApiService.deleteMeeting(event.mMeeting);
 		initList();
 	}
