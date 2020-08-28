@@ -1,27 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/save_button"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editText_sujet"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:errorEnabled="true"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="0dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/sujet"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -37,75 +18,100 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.9" />
 
-
-    <com.santalu.maskedittext.MaskEditText
-        android:id="@+id/editTextDate2"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/text_date"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:autofillHints="nsp"
-        android:ems="10"
-        android:hint="@string/fin"
-        android:inputType="datetime"
-        app:met_mask="##/##/#### à ##h##m"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintHorizontal_bias="1.0"
+        android:text="@string/choose_date"
+        app:layout_constraintBottom_toBottomOf="@+id/button_date"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@id/textView4"
-        tools:layout_editor_absoluteY="426dp"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/editText_sujet" />
 
+    <Button
+        android:id="@+id/button_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ajouter"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/editText_sujet" />
 
+    <TextView
+        android:id="@+id/text_starting_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/choose_starting_time"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/button_date"
+        app:layout_constraintEnd_toStartOf="@id/text_ending_time"/>
+
+    <Button
+        android:id="@+id/button_starting_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ajouter"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/text_starting_time"
+        app:layout_constraintEnd_toStartOf="@+id/button_ending_time"/>
+
+    <TextView
+        android:id="@+id/text_ending_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/choose_ending_time"
+        app:layout_constraintEnd_toEndOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/button_date"
+        app:layout_constraintStart_toEndOf="@id/text_starting_time"/>
+
+    <Button
+        android:id="@+id/button_ending_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ajouter"
+        app:layout_constraintEnd_toEndOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/text_ending_time"
+        app:layout_constraintStart_toEndOf="@id/button_starting_time"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editText_sujet"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="0dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/sujet"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/text_salle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="20dp"
         android:text="@string/salle"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/editText_sujet" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editDate"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="170dp"
-        app:errorEnabled="true"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@id/text_salle"
-        android:layout_width="0dp">
-
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="@string/date_et_heure_de_fin"
-        app:layout_constraintBottom_toTopOf="@+id/editTextDate2"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/editDate" />
-
-    <TextView
-        android:id="@+id/text_participants"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="@string/participants"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDate2" />
+        app:layout_constraintTop_toBottomOf="@+id/button_ending_time" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/editDate"
+        app:layout_constraintBottom_toTopOf="@+id/text_participants"
         app:layout_constraintEnd_toStartOf="@+id/radioGroup2"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/text_salle">
+
+        <RadioButton
+            android:id="@+id/radioButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radiobutton" />
 
         <RadioButton
             android:id="@+id/radioButton2"
@@ -130,22 +136,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/radiobutton" />
-
-        <RadioButton
-            android:id="@+id/radioButton6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/radiobutton" />
     </RadioGroup>
 
     <RadioGroup
         android:id="@+id/radioGroup2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/editDate"
+        app:layout_constraintBottom_toTopOf="@id/text_participants"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toEndOf="@id/radioGroup"
         app:layout_constraintTop_toTopOf="@+id/radioGroup">
+
+        <RadioButton
+            android:id="@+id/radioButton6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radiobutton" />
 
         <RadioButton
             android:id="@+id/radioButton7"
@@ -170,13 +176,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/radiobutton" />
-
-        <RadioButton
-            android:id="@+id/radioButton11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/radiobutton" />
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/text_participants"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="420dp"
+        android:text="@string/participants"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"/>
 
     <TextView
         android:id="@+id/attendees"
@@ -191,15 +200,23 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button"
+        android:text="@string/ajouter"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/text_participants" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="code de suppression"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/button"
+        app:layout_constraintStart_toStartOf="@id/guideline2"/>
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button"
+        android:text="@string/enregistrer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline2" />

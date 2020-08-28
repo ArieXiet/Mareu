@@ -2,6 +2,23 @@
     <string name="app_name">Mareu</string>
     <string name="roomlogo">RoomLogo</string>
     <string name="reunion">Reunion</string>
-    <string name="participants">participants</string>
+    <string name="participants">Participants</string>
     <string name="delete_button">delete button</string>
+    <string name="sujet">Sujet</string>
+    <string name="fin">Fin</string>
+    <string name="d_but">Début</string>
+    <string name="salle">Salle</string>
+    <string name="date_et_heure_de_debut">Date et heure de début</string>
+    <string name="date_et_heure_de_fin">Date et heure de fin</string>
+    <string name="radiobutton">RadioButton</string>
+    <string name="selected_attendees">Pas de participant sélectionné</string>
+    <string name="button">Button</string>
+    <string name="date">Date</string>
+    <string name="starting">Heure de début</string>
+    <string name="ending">Heure de fin</string>
+    <string name="ajouter">Ajouter</string>
+    <string name="enregistrer">enregistrer</string>
+    <string name="choose_date">Choisissez une date</string>
+    <string name="choose_starting_time">Heure de début</string>
+    <string name="choose_ending_time">Heure de fin</string>
 </resources>

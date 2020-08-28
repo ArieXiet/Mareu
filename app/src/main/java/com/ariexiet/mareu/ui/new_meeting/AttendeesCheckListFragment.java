@@ -1,4 +1,4 @@
-package com.ariexiet.mareu.ui;
+package com.ariexiet.mareu.ui.new_meeting;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,8 +20,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ariexiet.mareu.R;
 import com.ariexiet.mareu.di.DI;
 import com.ariexiet.mareu.events.DeleteMeetingEvent;
+import com.ariexiet.mareu.model.Employee;
 import com.ariexiet.mareu.model.Meeting;
 import com.ariexiet.mareu.service.MeetingApiService;
+import com.ariexiet.mareu.ui.list_meeting.ListMeetingFragment;
+import com.ariexiet.mareu.ui.list_meeting.ListMeetingRecyclerViewAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,27 +32,27 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.List;
 import java.util.Objects;
 
-public class ListMeetingFragment extends Fragment {
+import static android.content.ContentValues.TAG;
+
+public class AttendeesCheckListFragment extends Fragment {
 	private MeetingApiService mApiService;
 	private RecyclerView mRecyclerView;
-	private static final String TAG = "DeleteEvent";
-	private ListMeetingRecyclerViewAdapter mAdapter;
+	private AttendeesCheckListRecyclerViewAdapter mAdapter;
 
-	public static ListMeetingFragment newInstance() {
-		return new ListMeetingFragment();
+	public static AttendeesCheckListFragment newInstance() {
+		return new AttendeesCheckListFragment();
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mApiService = DI.getMeetingApiService();
-		getActivity().findViewById(R.id.floatingActionButton).setVisibility(View.VISIBLE);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
-	                         Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_meeting_list, container, false);
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.attendees_check_list, container, false);
 		Context context = view.getContext();
 		mRecyclerView = (RecyclerView) view;
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -67,8 +71,9 @@ public class ListMeetingFragment extends Fragment {
 	 */
 	private void initList() {
 		Log.d(TAG, "DEBUG: initList: ");
-		List<Meeting> mMeetings = mApiService.getMeetings();
-		mAdapter = new ListMeetingRecyclerViewAdapter(mMeetings, getContext());
+		((AppCompatActivity) getActivity()).getSupportActionBar().show();
+		List<Employee> mEmployees = mApiService.getEmployees();
+		mAdapter = new AttendeesCheckListRecyclerViewAdapter(mEmployees, getContext());
 		mRecyclerView.setAdapter(mAdapter);
 	}
 

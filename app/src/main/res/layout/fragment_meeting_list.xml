@@ -11,7 +11,7 @@
     tools:actionBarNavMode="standard"
     tools:menu="@menu/menu_de_filtrage"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".ui.ListMeetingFragment"
+    tools:context=".ui.list_meeting.ListMeetingFragment"
     tools:listitem="@layout/fragment_meeting">
 
 </androidx.recyclerview.widget.RecyclerView>

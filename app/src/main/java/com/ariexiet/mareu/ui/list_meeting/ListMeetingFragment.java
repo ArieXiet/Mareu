@@ -1,7 +1,8 @@
-package com.ariexiet.mareu.ui;
+package com.ariexiet.mareu.ui.list_meeting;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,56 +11,50 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ariexiet.mareu.R;
-import com.ariexiet.mareu.model.Employee;
+import com.ariexiet.mareu.di.DI;
+import com.ariexiet.mareu.events.DeleteMeetingEvent;
+import com.ariexiet.mareu.model.Meeting;
+import com.ariexiet.mareu.service.MeetingApiService;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class ListAttendeesFragment extends Fragment {
-	private static final String ARG_COLOR = "color";
+public class ListMeetingFragment extends Fragment {
+	private MeetingApiService mApiService;
 	private RecyclerView mRecyclerView;
-	private ArrayList<Employee> mAttendees;
-	private int mColor;
+	private static final String TAG = "DeleteEvent";
+	private ListMeetingRecyclerViewAdapter mAdapter;
 
-	public static final String ARG_ATTENDEES = "argAttendees";
-
-	public static ListAttendeesFragment newInstance(ArrayList<Employee> attendees, int color) {
-		ListAttendeesFragment fragment = new ListAttendeesFragment();
-		Bundle args = new Bundle();
-		args.putParcelableArrayList(ARG_ATTENDEES, attendees);
-		args.putInt(ARG_COLOR, color);
-		fragment.setArguments(args);
-		return fragment;
+	public static ListMeetingFragment newInstance() {
+		return new ListMeetingFragment();
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mApiService = DI.getMeetingApiService();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
-			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.attendees_list, container, false);
-
-		if(getArguments() != null) {
-			mAttendees = (ArrayList) getArguments().getSerializable(ARG_ATTENDEES);
-			mColor = getArguments().getInt(ARG_COLOR);
-		}
-		Context context = v.getContext();
-		mRecyclerView = (RecyclerView) v;
+	                         Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_meeting_list, container, false);
+		Context context = view.getContext();
+		mRecyclerView = (RecyclerView) view;
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 		mRecyclerView.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getContext()), DividerItemDecoration.VERTICAL));
 		initList();
-		return v;
+		return view;
 	}
 
 	@Override
@@ -71,7 +66,11 @@ public class ListAttendeesFragment extends Fragment {
 	 * Init the List of neighbours
 	 */
 	private void initList() {
-		mRecyclerView.setAdapter(new AttendeesRecyclerViewAdapter(mAttendees, mColor, getContext()));
+		Log.d(TAG, "DEBUG: initList: ");
+		((AppCompatActivity) getActivity()).getSupportActionBar().show();
+		List<Meeting> mMeetings = mApiService.getMeetings();
+		mAdapter = new ListMeetingRecyclerViewAdapter(mMeetings, getContext());
+		mRecyclerView.setAdapter(mAdapter);
 	}
 
 	@Override
@@ -83,11 +82,21 @@ public class ListAttendeesFragment extends Fragment {
 	@Override
 	public void onStart() {
 		super.onStart();
+		Log.d(TAG, "DEBUG: onStart: register");
+		EventBus.getDefault().register(this);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
+		Log.d(TAG, "DEBUG: onStop: unregister");
 		EventBus.getDefault().unregister(this);
+	}
+
+	@Subscribe
+	public void onDeleteMeeting(DeleteMeetingEvent event) {
+		Log.d(TAG, "DEBUG: onDeleteMeeting");
+		mApiService.deleteMeeting(event.mMeeting);
+		initList();
 	}
 }

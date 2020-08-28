@@ -2,8 +2,6 @@ package com.ariexiet.mareu.model;
 
 import android.graphics.Color;
 
-import androidx.annotation.ColorInt;
-
 import com.ariexiet.mareu.R;
 
 public class MeetingRoom {

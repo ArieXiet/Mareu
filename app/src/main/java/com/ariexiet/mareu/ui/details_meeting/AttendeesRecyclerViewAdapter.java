@@ -1,4 +1,4 @@
-package com.ariexiet.mareu.ui;
+package com.ariexiet.mareu.ui.details_meeting;
 
 import android.content.Context;
 import android.view.LayoutInflater;
