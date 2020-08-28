@@ -178,9 +178,7 @@ public class NewMeetingFragment extends Fragment implements DatePickerDialog.OnD
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
-	/**
-	 * Init the List of neighbours
-	 */
+
 	private void initList() {
 		mRadioButton1.setText("Salle 1");
 		mRadioButton2.setText("Salle 2");
