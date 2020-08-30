@@ -4,24 +4,22 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
-import android.widget.TextView;
-import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.ariexiet.mareu.R;
 import com.ariexiet.mareu.ui.list_meeting.ListMeetingFragment;
+import com.ariexiet.mareu.ui.list_meeting.ListMeetingRecyclerViewAdapter;
 import com.ariexiet.mareu.ui.new_meeting.NewMeetingFragment;
 
-import java.text.DateFormat;
-import java.util.Calendar;
+import java.util.Collections;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
+	ListMeetingRecyclerViewAdapter mAdapter;
 
 
 	@Override
@@ -42,27 +40,6 @@ public class MainActivity extends AppCompatActivity {
 		return true;
 	}
 
-	public boolean onOptionsItemSelected(MenuItem item) {
-		boolean mDisplay = false;
-		switch (item.getItemId()) {
-			case R.id.action_sort:
-				MenuFragment fragment = MenuFragment.newInstance();
-				if (mDisplay == false) {
-					getSupportFragmentManager()
-							.beginTransaction()
-							.replace(R.id.container_menu, fragment)
-							.addToBackStack("ListMeetingFragment")
-							.commit();
-					mDisplay = true;
-				}else {
-					getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-					mDisplay = false;
-				}
-				return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
 	public void newMeeting(View view) {
 		NewMeetingFragment fragment = NewMeetingFragment.newInstance();
 		getSupportFragmentManager()
@@ -78,8 +55,22 @@ public class MainActivity extends AppCompatActivity {
 		if (fragment instanceof ListMeetingFragment) {
 			this.findViewById(R.id.floatingActionButton).setVisibility(View.VISIBLE);
 		} else {
-			this.getSupportActionBar().hide();
+			Objects.requireNonNull(this.getSupportActionBar()).hide();
 			this.findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
 		}
 	}
+/*	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+			case R.id.action_sort:
+				mAdapter.sortItemsByDate();
+				Toast.makeText(this, "Item 1 selected", Toast.LENGTH_SHORT).show();
+				return true;
+			case R.id.action_sort2:
+				Toast.makeText(this, "Item 2 selected", Toast.LENGTH_SHORT).show();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}*/
 }

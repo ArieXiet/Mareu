@@ -5,9 +5,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,12 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ariexiet.mareu.R;
 import com.ariexiet.mareu.di.DI;
-import com.ariexiet.mareu.events.DeleteMeetingEvent;
 import com.ariexiet.mareu.model.Meeting;
 import com.ariexiet.mareu.service.MeetingApiService;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 import java.util.Objects;
@@ -57,14 +55,6 @@ public class ListMeetingFragment extends Fragment {
 		return view;
 	}
 
-	@Override
-	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-	}
-
-	/**
-	 * Init the List of neighbours
-	 */
 	private void initList() {
 		Log.d(TAG, "DEBUG: initList: ");
 		((AppCompatActivity) getActivity()).getSupportActionBar().show();
@@ -73,30 +63,30 @@ public class ListMeetingFragment extends Fragment {
 		mRecyclerView.setAdapter(mAdapter);
 	}
 
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getActivity().getMenuInflater().inflate(R.menu.menu_de_filtrage, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+			case R.id.action_sort:
+				mAdapter.sortItemsByDate(mApiService.getMeetings());
+				Toast.makeText(getActivity(), "Item 1 selected", Toast.LENGTH_SHORT).show();
+				return true;
+			case R.id.action_sort2:
+				Toast.makeText(getActivity(), "Item 2 selected", Toast.LENGTH_SHORT).show();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+
 	@Override
 	public void onResume() {
 		super.onResume();
 		initList();
 	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		Log.d(TAG, "DEBUG: onStart: register");
-		EventBus.getDefault().register(this);
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		Log.d(TAG, "DEBUG: onStop: unregister");
-		EventBus.getDefault().unregister(this);
-	}
-
-	@Subscribe
-	public void onDeleteMeeting(DeleteMeetingEvent event) {
-		Log.d(TAG, "DEBUG: onDeleteMeeting");
-		mApiService.deleteMeeting(event.mMeeting);
-		initList();
-	}
 }

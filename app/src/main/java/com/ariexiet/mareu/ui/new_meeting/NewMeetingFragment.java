@@ -240,8 +240,8 @@ public class NewMeetingFragment extends Fragment implements DatePickerDialog.OnD
 
 	@OnClick(R.id.button)
 	void chooseAttendees() {
-		AttendeesCheckListFragment fragment = AttendeesCheckListFragment.newInstance();
-		getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+		AttendeesCheckListFragment fragmentA = AttendeesCheckListFragment.newInstance();
+		getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, fragmentA).commit();
 
 	}
 

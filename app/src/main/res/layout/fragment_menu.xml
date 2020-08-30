@@ -10,7 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="tri par date/heure"
-        tools:layout_editor_absoluteX="303dp" />
+        tools:layout_editor_absoluteX="303dp"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/tri2"

@@ -19,7 +19,11 @@ import com.ariexiet.mareu.model.Employee;
 import com.ariexiet.mareu.model.Meeting;
 import com.ariexiet.mareu.ui.details_meeting.DetailsMeetingFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -78,7 +82,8 @@ public class ListMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ListMee
 				mAttendeesToText += ", ";
 			}
 		}
-		holder.mMeetingName.setText(mMeeting.getSubject());
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+		holder.mMeetingName.setText(mMeeting.getSubject() + ", " + dateFormat.format(mMeeting.getStart().getTime()));
 		holder.mParticipants.setText(mAttendeesToText);
 		holder.mRoomLogo.setImageResource(mMeeting.getRoom().getRoomLogo());
 		//holder.mDeleteButton.setOnClickListener(v -> EventBus.getDefault().post(new DeleteMeetingEvent(mMeeting)));
@@ -91,6 +96,16 @@ public class ListMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ListMee
 				//EventBus.getDefault().post(new DeleteMeetingEvent(mMeeting));
 			}
 		});
+	}
+
+	public void sortItemsByDate(List<Meeting> meetings){
+		Collections.sort(meetings, new Comparator<Meeting>() {
+			@Override
+			public int compare(Meeting o1, Meeting o2) {
+				return o1.getStart().compareTo(o2.getStart());
+			}
+		});
+		this.notifyDataSetChanged();
 	}
 
 

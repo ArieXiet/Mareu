@@ -10,6 +10,6 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.new_meeting.AttendeesCheckListFragment"
-    tools:listitem="@layout/fragment_meeting">
+    tools:listitem="@layout/attendees_check">
 
 </androidx.recyclerview.widget.RecyclerView>
