@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Meeting implements Serializable {
+	//TODO remettre la date a part
+	private Calendar mDate;
 	private Calendar mStart;
 	private Calendar mEnd;
 	private MeetingRoom mRoom;
@@ -12,13 +14,22 @@ public class Meeting implements Serializable {
 	private ArrayList<Employee> mAttendees;
 	private int mDeleteCode;
 
-	public Meeting(Calendar start, Calendar end, MeetingRoom room, String subject, ArrayList<Employee> attendees, int deleteCode) {
+	public Meeting(Calendar date, Calendar start, Calendar end, MeetingRoom room, String subject, ArrayList<Employee> attendees, int deleteCode) {
+		mDate = date;
 		mStart = start;
 		mEnd = end;
 		mRoom = room;
 		mSubject = subject;
 		mAttendees = attendees;
 		mDeleteCode = deleteCode;
+	}
+
+	public Calendar getDate() {
+		return mDate;
+	}
+
+	public void setDate(Calendar date) {
+		mDate = date;
 	}
 
 	public Calendar getStart() {

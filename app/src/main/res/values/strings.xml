@@ -21,4 +21,5 @@
     <string name="choose_date">Choisissez une date</string>
     <string name="choose_starting_time">Heure de début</string>
     <string name="choose_ending_time">Heure de fin</string>
+    <string name="valider">Valider</string>
 </resources>

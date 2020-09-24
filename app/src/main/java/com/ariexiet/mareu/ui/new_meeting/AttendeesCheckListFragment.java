@@ -8,10 +8,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,8 +22,10 @@ import com.ariexiet.mareu.R;
 import com.ariexiet.mareu.di.DI;
 import com.ariexiet.mareu.model.Employee;
 import com.ariexiet.mareu.service.MeetingApiService;
+import com.ariexiet.mareu.ui.MainActivity;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,7 +37,8 @@ public class AttendeesCheckListFragment extends Fragment {
 	private AttendeesCheckListRecyclerViewAdapter mAdapter;
 
 	public static AttendeesCheckListFragment newInstance() {
-		return new AttendeesCheckListFragment();
+		AttendeesCheckListFragment fragment = new AttendeesCheckListFragment();
+		return fragment;
 	}
 
 	@Override
@@ -47,10 +52,20 @@ public class AttendeesCheckListFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.attendees_check_list, container, false);
 		Context context = view.getContext();
-		mRecyclerView = (RecyclerView) view;
+		mRecyclerView = view.findViewById(R.id.list_attendees_check);
+		Button mAttendeeButton = view.findViewById(R.id.attendees_button);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 		mRecyclerView.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getContext()), DividerItemDecoration.VERTICAL));
 		initList();
+		mAttendeeButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mApiService.getServiceMeeting().setAttendees(mAdapter.mCheckedEmployees);
+				NewMeetingFragment fragment = new NewMeetingFragment();
+				((MainActivity)getActivity()).replaceFragment(fragment, "frags");
+
+			}
+		});
 		return view;
 	}
 
@@ -58,6 +73,7 @@ public class AttendeesCheckListFragment extends Fragment {
 	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 	}
+
 
 	private void initList() {
 		Log.d(TAG, "DEBUG: initList: ");
@@ -72,6 +88,11 @@ public class AttendeesCheckListFragment extends Fragment {
 		initList();
 	}
 
-
-
+	@Override
+	public void onStop() {
+		super.onStop();
+		Log.d(TAG, "onStop: DEBUG:");
+		NewMeetingFragment fragment = new NewMeetingFragment();
+		((MainActivity)getActivity()).replaceFragment(fragment, "frags");
+	}
 }

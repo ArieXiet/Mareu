@@ -10,19 +10,16 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.ariexiet.mareu.R;
 import com.ariexiet.mareu.model.Meeting;
+import com.ariexiet.mareu.ui.MainActivity;
 import com.ariexiet.mareu.ui.list_meeting.ListMeetingFragment;
 
-import org.joda.time.LocalDate;
-import org.joda.time.Minutes;
-
 import java.util.Calendar;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,9 +47,7 @@ public class DetailsMeetingFragment extends Fragment {
 
 	public static final String ARG_MEETING = "argMeeting";
 
-	private Meeting mMeeting;
 	private static Context mContext;
-	private int mColor;
 
 	public static DetailsMeetingFragment newInstance(Meeting meeting, Context context) {
 		DetailsMeetingFragment fragment = new DetailsMeetingFragment();
@@ -74,28 +69,34 @@ public class DetailsMeetingFragment extends Fragment {
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_details, container, false);
 
-		mMeeting = (Meeting) getArguments().getSerializable(ARG_MEETING);
+		Meeting meeting = (Meeting) Objects.requireNonNull(getArguments()).getSerializable(ARG_MEETING);
 		ButterKnife.bind(this, view);
-		mColor = mMeeting.getRoom().getRoomColor();
-		int mDuree = (mMeeting.getEnd().get(Calendar.MINUTE)- mMeeting.getStart().get(Calendar.MINUTE));
+		int color = Objects.requireNonNull(meeting).getRoom().getRoomColor();
+		int mDuree = (meeting.getEnd().get(Calendar.MINUTE)- meeting.getStart().get(Calendar.MINUTE));
 		if (mDuree < 0) {
 			mDuree += 60;
 		}
-		mLogo.setImageResource(mMeeting.getRoom().getRoomLogo());
-		mLength.setText("Durée: " + String.format("%02d",mDuree) +"mn");
-		mSubject.setText("Sujet: " + mMeeting.getSubject());
-		mSubject.setTextColor(mColor);
-		mStartingTime.setText("Le " + String.format("%02d",mMeeting.getStart().get(Calendar.DAY_OF_MONTH)) +
-				"/" + String.format("%02d",mMeeting.getStart().get(Calendar.MONTH)) +
-				" à " + String.format("%02d",mMeeting.getStart().get(Calendar.HOUR_OF_DAY)) +
-				"h" + String.format("%02d",mMeeting.getStart().get(Calendar.MINUTE)));
-		mRoomName.setText("Salle " + mMeeting.getRoom().getRoomNumber());
-		mDeleteCode.setText("Code de suppression: " + mMeeting.getDeleteCode());
-		mCalendar.setColorFilter(mColor);
-		mClock.setColorFilter(mColor);
-		mPlace.setColorFilter(mColor);
+		mLogo.setImageResource(meeting.getRoom().getRoomLogo());
+		StringBuilder mConstruction = new StringBuilder();
+		mConstruction.append("Durée: ").append(mDuree).append("mn");
+		mLength.setText(mConstruction);
+		String mDay = String.format("%02d", meeting.getStart().get(Calendar.DAY_OF_MONTH));
+		mConstruction.delete(0, mConstruction.length()).append("Le ").append(String.format("%02d", meeting.getStart().get(Calendar.DAY_OF_MONTH))).append("/").append(String.format("%02d", meeting.getStart().get(Calendar.MONTH))).append(" à ").append(String.format("%02d", meeting.getStart().get(Calendar.HOUR_OF_DAY))).append("h").append(String.format("%02d", meeting.getStart().get(Calendar.MINUTE)));
+		mStartingTime.setText(mConstruction);
+		//mLength.setText("Durée: " + String.format("%02d",mDuree) +"mn");
+		mSubject.setText("Sujet: " + meeting.getSubject());
+		mSubject.setTextColor(color);
+		//mStartingTime.setText("Le " + String.format("%02d", meeting.getStart().get(Calendar.DAY_OF_MONTH)) +
+		//		"/" + String.format("%02d", meeting.getStart().get(Calendar.MONTH)) +
+		//		" à " + String.format("%02d", meeting.getStart().get(Calendar.HOUR_OF_DAY)) +
+		//		"h" + String.format("%02d", meeting.getStart().get(Calendar.MINUTE)));
+		mRoomName.setText("Salle " + meeting.getRoom().getRoomNumber());
+		mDeleteCode.setText("Code de suppression: " + meeting.getDeleteCode());
+		mCalendar.setColorFilter(color);
+		mClock.setColorFilter(color);
+		mPlace.setColorFilter(color);
 
-		ListAttendeesFragment fragment = ListAttendeesFragment.newInstance(mMeeting.getAttendees(), mColor);
+		ListAttendeesFragment fragment = ListAttendeesFragment.newInstance(meeting.getAttendees(), color);
 		((FragmentActivity)mContext).getSupportFragmentManager()
 				.beginTransaction()
 				.replace(R.id.attendees_container, fragment)
@@ -106,7 +107,7 @@ public class DetailsMeetingFragment extends Fragment {
 	@Override
 	public void onStop() {
 		super.onStop();
-		Fragment fragment = new ListMeetingFragment();
-		getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+		ListMeetingFragment fragment = new ListMeetingFragment();
+		((MainActivity)getActivity()).replaceFragment(fragment, "frags");
 	}
 }

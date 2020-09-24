@@ -51,7 +51,7 @@ public class ListAttendeesFragment extends Fragment {
 		View v = inflater.inflate(R.layout.attendees_list, container, false);
 
 		if(getArguments() != null) {
-			mAttendees = (ArrayList) getArguments().getSerializable(ARG_ATTENDEES);
+			mAttendees = (ArrayList<Employee>) getArguments().getSerializable(ARG_ATTENDEES);
 			mColor = getArguments().getInt(ARG_COLOR);
 		}
 		Context context = v.getContext();
@@ -67,9 +67,6 @@ public class ListAttendeesFragment extends Fragment {
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
-	/**
-	 * Init the List of neighbours
-	 */
 	private void initList() {
 		mRecyclerView.setAdapter(new AttendeesRecyclerViewAdapter(mAttendees, mColor, getContext()));
 	}

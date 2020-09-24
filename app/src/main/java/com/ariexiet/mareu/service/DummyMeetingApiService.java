@@ -3,13 +3,17 @@ package com.ariexiet.mareu.service;
 import com.ariexiet.mareu.model.Employee;
 import com.ariexiet.mareu.model.Meeting;
 import com.ariexiet.mareu.model.MeetingRoom;
+import com.ariexiet.mareu.model.ServiceMeeting;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class DummyMeetingApiService implements MeetingApiService {
 	private final List<Meeting> mMeetings = DummyMeetingGenerator.generateMeetings();
+	private List<Meeting> mMeetingsByDate = null;
 	private final List<MeetingRoom> mMeetingRooms = DummyMeetingGenerator.generateMeetingRooms();
 	private final List<Employee> mEmployees = DummyMeetingGenerator.generateEmployees();
+	private ServiceMeeting mServiceMeeting = DummyMeetingGenerator.serviceMeeting();
 
 	@Override
 	public List<Meeting> getMeetings() {
@@ -27,6 +31,9 @@ public class DummyMeetingApiService implements MeetingApiService {
 	}
 
 	@Override
+	public ServiceMeeting getServiceMeeting() { return mServiceMeeting; }
+
+	@Override
 	public void deleteMeeting(Meeting meeting) {
 		mMeetings.remove(meeting);
 	}
@@ -34,5 +41,21 @@ public class DummyMeetingApiService implements MeetingApiService {
 	@Override
 	public void createMeeting(Meeting meeting) {
 		mMeetings.add(meeting);
+	}
+
+	@Override
+	public void createPreparedMeeting(ServiceMeeting serviceMeeting) {
+		mServiceMeeting = serviceMeeting;
+	}
+
+	@Override
+	public List<Meeting> getMeetingsByDate(Calendar date) {
+		mMeetingsByDate = null;
+		for (Meeting in : mMeetings) {
+			if (in.getDate() == date) {
+				mMeetingsByDate.add(in);
+			}
+		}
+		return mMeetingsByDate;
 	}
 }
