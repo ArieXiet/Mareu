@@ -50,9 +50,13 @@ public class DummyMeetingApiService implements MeetingApiService {
 
 	@Override
 	public List<Meeting> getMeetingsByDate(Calendar date) {
+		Calendar mTestStart = null;
+		Calendar mTestEnd = null;
+		mTestStart.set(date.YEAR, date.MONTH, date.DAY_OF_MONTH, 0, 1);
+		mTestEnd.set(date.YEAR, date.MONTH, date.DAY_OF_MONTH, 23, 59);
 		mMeetingsByDate = null;
 		for (Meeting in : mMeetings) {
-			if (in.getDate() == date) {
+			if (in.getDate().after(mTestStart) && in.getStart().before(mTestEnd)) {
 				mMeetingsByDate.add(in);
 			}
 		}

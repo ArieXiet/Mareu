@@ -12,7 +12,9 @@ import android.widget.DatePicker;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +24,7 @@ import com.ariexiet.mareu.di.DI;
 import com.ariexiet.mareu.model.Meeting;
 import com.ariexiet.mareu.service.MeetingApiService;
 import com.ariexiet.mareu.ui.MyApplication;
+import com.ariexiet.mareu.ui.new_meeting.DatePickerFragment;
 
 
 import java.text.DateFormat;
@@ -39,6 +42,9 @@ public class ListMeetingFragment extends Fragment implements DatePickerDialog.On
 	public int mMonth;
 	public int mDayOfMonth;
 	public Calendar mC = Calendar.getInstance();
+	private static Context mContext;
+	private static ListMeetingRecyclerViewAdapter mInstance;
+	private boolean mSort = false;
 
 	public static ListMeetingFragment newInstance() {
 		return new ListMeetingFragment();
@@ -63,12 +69,19 @@ public class ListMeetingFragment extends Fragment implements DatePickerDialog.On
 	}
 
 	private void initList() {
-		Log.d(TAG, "DEBUG: initList: ");
+		Log.d(TAG, "DEBUG: initList: " + mSort);
 		((AppCompatActivity) getActivity()).getSupportActionBar().show();
 		List<Meeting> mMeetings = mApiService.getMeetings();
-		mAdapter = new ListMeetingRecyclerViewAdapter(mMeetings, getContext());
-		((MyApplication)getActivity().getApplication()).setRefToAdapter(mAdapter);
-		mRecyclerView.setAdapter(mAdapter);
+		if (!mSort){
+			mAdapter = new ListMeetingRecyclerViewAdapter(mMeetings, getContext());
+			((MyApplication)getActivity().getApplication()).setRefToAdapter(mAdapter);
+			mRecyclerView.setAdapter(mAdapter);
+		} else {
+			List<Meeting> mMeetingsByDate = DI.getMeetingApiService().getMeetingsByDate(mC);
+			mAdapter = new ListMeetingRecyclerViewAdapter(mMeetingsByDate, getContext());
+			((MyApplication)getActivity().getApplication()).setRefToAdapter(mAdapter);
+			mRecyclerView.setAdapter(mAdapter);
+		}
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -79,8 +92,14 @@ public class ListMeetingFragment extends Fragment implements DatePickerDialog.On
 	@Override
 	public void onResume() {
 		super.onResume();
-		initList();
+		//initList();
 		getActivity().findViewById(R.id.floatingActionButton).setVisibility(View.VISIBLE);
+	}
+
+	public void sortItemsByDate(){
+		DialogFragment datePicker = new DatePickerFragment(mInstance);
+		datePicker.show(((FragmentActivity)mContext).getSupportFragmentManager(), "date picker");
+		Log.d(TAG, "sortItemsByDate: DEBUG");
 	}
 
 	@Override
@@ -91,6 +110,11 @@ public class ListMeetingFragment extends Fragment implements DatePickerDialog.On
 		mC.set(Calendar.YEAR, year);
 		mC.set(Calendar.MONTH, month);
 		mC.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-		String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(mC.getTime());
+		Log.d(TAG, "onDateSet: DEBUG");
+		mSort = true;
+		List<Meeting> mMeetingsByDate = DI.getMeetingApiService().getMeetingsByDate(mC);
+		mAdapter = new ListMeetingRecyclerViewAdapter(mMeetingsByDate, getContext());
+		((MyApplication)getActivity().getApplication()).setRefToAdapter(mAdapter);
+		mRecyclerView.setAdapter(mAdapter);
 	}
 }

@@ -42,12 +42,12 @@ public class ListMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ListMee
 
 	private static List<Meeting> mMeetings;
 	private static List<Meeting> mMeetingsByDate;
+	private static List<Meeting> mMeetingsToShow;
 	private static Context mContext;
 	private static final String TAG = "ListMeetingRecyclerView";
 	public int mYear;
 	public int mMonth;
 	public int mDayOfMonth;
-	public int mSort = 1;
 	public Calendar mC = Calendar.getInstance();
 
 	private static ListMeetingRecyclerViewAdapter mInstance;
@@ -55,19 +55,6 @@ public class ListMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ListMee
 	public ListMeetingRecyclerViewAdapter(List<Meeting> meetings, Context context) {
 		mMeetings = meetings;
 		mContext = context;
-	}
-
-	@Override
-	public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-		mYear = year;
-		mMonth = month;
-		mDayOfMonth = dayOfMonth;
-		mC.set(Calendar.YEAR, year);
-		mC.set(Calendar.MONTH, month);
-		mC.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-		mMeetingsByDate = DI.getMeetingApiService().getMeetingsByDate(mC);
-		mSort = 2;
-		notifyAll();
 	}
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -104,62 +91,40 @@ public class ListMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ListMee
 
 	@Override
 	public void onBindViewHolder(@NonNull ListMeetingRecyclerViewAdapter.ViewHolder holder, int position) {
-		if (mSort == 1) {
-			final Meeting mMeeting = mMeetings.get(position);
-			String mAttendeesToText = "";
-			ArrayList<Employee> mEmployeeToText = mMeeting.getAttendees();
-			for(Employee in : mEmployeeToText) {
-				mAttendeesToText += in.getName();
-				if(in != (mEmployeeToText.get(mEmployeeToText.size() - 1))) {
-					mAttendeesToText += ", ";
-				}
-			}
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-			holder.mMeetingName.setText(mMeeting.getSubject() + ", " + dateFormat.format(mMeeting.getStart().getTime()));
-			holder.mParticipants.setText(mAttendeesToText);
-			holder.mRoomLogo.setImageResource(mMeeting.getRoom().getRoomLogo());
-			//holder.mDeleteButton.setOnClickListener(v -> EventBus.getDefault().post(new DeleteMeetingEvent(mMeeting)));
-			holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					Log.d(TAG, "DEBUG: onBindViewHolder: ");
-					DI.getMeetingApiService().deleteMeeting(mMeeting);
-					notifyItemRemoved(position);
-					//EventBus.getDefault().post(new DeleteMeetingEvent(mMeeting));
-				}
-			});
-		} else if (mSort == 2) {
-			final Meeting mMeeting = mMeetingsByDate.get(position);
-			String mAttendeesToText = "";
-			ArrayList<Employee> mEmployeeToText = mMeeting.getAttendees();
-			for(Employee in : mEmployeeToText) {
-				mAttendeesToText += in.getName();
-				if(in != (mEmployeeToText.get(mEmployeeToText.size() - 1))) {
-					mAttendeesToText += ", ";
-				}
-			}
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-			holder.mMeetingName.setText(mMeeting.getSubject() + ", " + dateFormat.format(mMeeting.getStart().getTime()));
-			holder.mParticipants.setText(mAttendeesToText);
-			holder.mRoomLogo.setImageResource(mMeeting.getRoom().getRoomLogo());
-			//holder.mDeleteButton.setOnClickListener(v -> EventBus.getDefault().post(new DeleteMeetingEvent(mMeeting)));
-			holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					Log.d(TAG, "DEBUG: onBindViewHolder: ");
-					DI.getMeetingApiService().deleteMeeting(mMeeting);
-					notifyItemRemoved(position);
-					//EventBus.getDefault().post(new DeleteMeetingEvent(mMeeting));
-				}
-			});
-			Log.d(TAG, "onBindViewHolder: " + mC.getTime());
+		if (mMeetingsToShow == null) {
+			Log.d(TAG, "onBindViewHolder: DEBUG");
+			mMeetingsToShow = mMeetings;
 		}
+			final Meeting mMeeting = mMeetingsToShow.get(position);
+			String mAttendeesToText = "";
+			ArrayList<Employee> mEmployeeToText = mMeeting.getAttendees();
+			for(Employee in : mEmployeeToText) {
+				mAttendeesToText += in.getName();
+				if(in != (mEmployeeToText.get(mEmployeeToText.size() - 1))) {
+					mAttendeesToText += ", ";
+				}
+			}
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+			holder.mMeetingName.setText(mMeeting.getSubject() + ", " + dateFormat.format(mMeeting.getStart().getTime()));
+			holder.mParticipants.setText(mAttendeesToText);
+			holder.mRoomLogo.setImageResource(mMeeting.getRoom().getRoomLogo());
+			//holder.mDeleteButton.setOnClickListener(v -> EventBus.getDefault().post(new DeleteMeetingEvent(mMeeting)));
+			holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					Log.d(TAG, "DEBUG: onBindViewHolder: ");
+					DI.getMeetingApiService().deleteMeeting(mMeeting);
+					notifyItemRemoved(position);
+					//EventBus.getDefault().post(new DeleteMeetingEvent(mMeeting));
+				}
+			});
+
 	}
 
 	public void sortItemsByDate(){
-		DialogFragment datePicker = new DatePickerFragment((DatePickerDialog.OnDateSetListener) mInstance);
+		DialogFragment datePicker = new DatePickerFragment(mInstance);
 		datePicker.show(((FragmentActivity)mContext).getSupportFragmentManager(), "date picker");
-		this.notifyDataSetChanged();
+		Log.d(TAG, "sortItemsByDate: DEBUG");
 	}
 
 	public void sortItemsByRoom(){
@@ -171,6 +136,20 @@ public class ListMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ListMee
 				return Integer.compare(num1, num2);
 			}
 		});
+		this.notifyDataSetChanged();
+	}
+
+	@Override
+	public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+		mYear = year;
+		mMonth = month;
+		mDayOfMonth = dayOfMonth;
+		mC.set(Calendar.YEAR, year);
+		mC.set(Calendar.MONTH, month);
+		mC.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+		mMeetingsByDate = DI.getMeetingApiService().getMeetingsByDate(mC);
+		mMeetingsToShow = mMeetingsByDate;
+		Log.d(TAG, "onDateSet: DEBUG");
 		this.notifyDataSetChanged();
 	}
 

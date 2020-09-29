@@ -6,6 +6,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
+
+import com.ariexiet.mareu.ui.MainActivity;
 
 import java.util.Calendar;
 
@@ -25,5 +28,11 @@ public class DatePickerFragment extends DialogFragment {
 
 	public DatePickerFragment(DatePickerDialog.OnDateSetListener listener) {
 		mListener = listener;
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		//getActivity().getSupportFragmentManager().popBackStack("frags", FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 }

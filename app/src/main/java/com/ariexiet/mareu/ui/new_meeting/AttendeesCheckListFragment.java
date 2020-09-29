@@ -24,8 +24,6 @@ import com.ariexiet.mareu.model.Employee;
 import com.ariexiet.mareu.service.MeetingApiService;
 import com.ariexiet.mareu.ui.MainActivity;
 
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -92,7 +90,7 @@ public class AttendeesCheckListFragment extends Fragment {
 	public void onStop() {
 		super.onStop();
 		Log.d(TAG, "onStop: DEBUG:");
-		NewMeetingFragment fragment = new NewMeetingFragment();
-		((MainActivity)getActivity()).replaceFragment(fragment, "frags");
+		//NewMeetingFragment fragment = new NewMeetingFragment();
+		//((MainActivity)getActivity()).replaceFragment(fragment, "frags");
 	}
 }

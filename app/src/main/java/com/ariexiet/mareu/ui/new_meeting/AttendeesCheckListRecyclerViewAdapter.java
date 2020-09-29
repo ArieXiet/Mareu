@@ -6,24 +6,17 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ariexiet.mareu.R;
 import com.ariexiet.mareu.model.Employee;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,22 +87,21 @@ public class AttendeesCheckListRecyclerViewAdapter extends RecyclerView.Adapter<
 	public void onBindViewHolder(@NonNull AttendeesCheckListRecyclerViewAdapter.ViewHolder holder, int position) {
 		holder.bind(position);
 		final Employee mEmployee = mEmployees.get(position);
-		//holder.mCheckBox.setChecked();
-		holder.mCheckBox.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (holder.mCheckBox.isChecked()) {
-					Log.d(TAG, "DEBUG: onClick: checkbox" + holder.mCheckBox.isChecked());
-					//holder.mCheckBox.setChecked(false);
-					itemStateArray.put(position, true);
-					mCheckedEmployees.add(mEmployee);
-					Log.d(TAG, "DEBUG: onClick: T" + itemStateArray.get(position));
-				} else {
-					//holder.mCheckBox.setChecked(true);
-					itemStateArray.put(position, false);
-					mCheckedEmployees.remove(/*mCheckedEmployees.indexOf(*/mEmployee/*)*/);
-					Log.d(TAG, "DEBUG: onClick: F" + itemStateArray.get(position));
-				}
+		if (!mCheckedEmployees.contains(mEmployee)) {
+			holder.mCheckBox.setChecked(false);
+		}
+		holder.mCheckBox.setOnClickListener(v -> {
+			if (holder.mCheckBox.isChecked()) {
+				Log.d(TAG, "DEBUG: onClick: checkbox" + holder.mCheckBox.isChecked());
+				//holder.mCheckBox.setChecked(false);
+				itemStateArray.put(position, true);
+				mCheckedEmployees.add(mEmployee);
+				Log.d(TAG, "DEBUG: onClick: T" + itemStateArray.get(position));
+			} else {
+				//holder.mCheckBox.setChecked(true);
+				itemStateArray.put(position, false);
+				mCheckedEmployees.remove(/*mCheckedEmployees.indexOf(*/mEmployee/*)*/);
+				Log.d(TAG, "DEBUG: onClick: F" + itemStateArray.get(position));
 			}
 		});
 

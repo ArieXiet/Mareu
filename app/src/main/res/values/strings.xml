@@ -22,4 +22,14 @@
     <string name="choose_starting_time">Heure de début</string>
     <string name="choose_ending_time">Heure de fin</string>
     <string name="valider">Valider</string>
+    <string name="salle_1">Salle 1</string>
+    <string name="salle_2">Salle 2</string>
+    <string name="salle_3">Salle 3</string>
+    <string name="salle_4">Salle 4</string>
+    <string name="salle_5">Salle 5</string>
+    <string name="salle_6">Salle 6</string>
+    <string name="salle_7">Salle 7</string>
+    <string name="salle_8">Salle 8</string>
+    <string name="salle_9">Salle 9</string>
+    <string name="salle_10">Salle 10</string>
 </resources>
