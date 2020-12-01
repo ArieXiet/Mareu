@@ -189,8 +189,6 @@ public class NewMeetingFragment extends Fragment implements DatePickerDialog.OnD
 	}
 
 	private void enableButton() {
-		Log.d(TAG, "enableButton: DEBUG Date " + mStartDate.getTime());
-		Log.d(TAG, "enableButton: DEBUG Dateend" + mEndDate.getTime());
 		List<Meeting> mMeetings = mApiService.getMeetings();
 		mRadioButton1.setEnabled(true);
 		mRadioButton2.setEnabled(true);
@@ -203,12 +201,9 @@ public class NewMeetingFragment extends Fragment implements DatePickerDialog.OnD
 		mRadioButton9.setEnabled(true);
 		mRadioButton10.setEnabled(true);
 		for (Meeting in : mMeetings) {
-			Log.d(TAG, "enableButton: DEBUG DateCompaDebut " + in.getSubject() + " " + in.getStart().getTime());
-			Log.d(TAG, "enableButton: DEBUG DateCompaFin " + in.getSubject() + " " + in.getEnd().getTime());
 				if ((mStartDate.after(in.getStart()) && mStartDate.before(in.getEnd())) ||
 						(mEndDate.after(in.getStart()) && mEndDate.before(in.getEnd())) ||
 						(mStartDate.before(in.getStart()) && mEndDate.after(in.getEnd()))) {
-					Log.d(TAG, "enableButton: DEBUG if");
 					switch (in.getRoom().getRoomNumber()) {
 						case 1:
 							mRadioButton1.setEnabled(false);
@@ -246,6 +241,7 @@ public class NewMeetingFragment extends Fragment implements DatePickerDialog.OnD
 		}
 
 	private void initList() {
+		Log.d(TAG, "initList: DEBUG" );
 		mRadioButton1.setText(R.string.salle_1);
 		mRadioButton2.setText(R.string.salle_2);
 		mRadioButton3.setText(R.string.salle_3);
@@ -285,7 +281,7 @@ public class NewMeetingFragment extends Fragment implements DatePickerDialog.OnD
 	public void onResume() {
 		super.onResume();
 		Log.d(TAG, "onResume: DEBUG:");
-		initList();
+		//initList();
 	}
 
 	@Override
@@ -324,7 +320,6 @@ public class NewMeetingFragment extends Fragment implements DatePickerDialog.OnD
 		String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(mC.getTime());
 		mTextDate.setText(currentDateString);
 		mPreparedMeeting.setDate(mC);
-		mPreparedMeeting.setInProgress(true);
 		mDateOn = true;
 		if (mStartOn && mEndOn) {
 			enableButton();
@@ -336,11 +331,11 @@ public class NewMeetingFragment extends Fragment implements DatePickerDialog.OnD
 		if (mStartOrEnd == 1) {
 			mStartHour = hourOfDay;
 			mStartMinute = minute;
-			Log.d(TAG, "onTimeSet: DEBUG " + mStartHour);
+			Log.d(TAG, "onTimeSet: DEBUG " + hourOfDay);
 			mPreparedMeeting.setStartHour(mStartHour);
 			mPreparedMeeting.setStartMin(mStartMinute);
-			mPreparedMeeting.setInProgress(true);
 			mTextStartingTime.setText(String.format("%02d", hourOfDay) + " : " + String.format("%02d", minute));
+			Log.d(TAG, "onTimeSet: DEBUG " + String.format("%02d", hourOfDay) + " : " + String.format("%02d", minute));
 			mStartOn = true;
 			mStartDate.set(Calendar.HOUR_OF_DAY, mStartHour);
 			mStartDate.set(Calendar.MINUTE, mStartMinute);
@@ -352,7 +347,6 @@ public class NewMeetingFragment extends Fragment implements DatePickerDialog.OnD
 			mEndMinute = minute;
 			mPreparedMeeting.setEndHour(mEndHour);
 			mPreparedMeeting.setEndMin(mEndMinute);
-			mPreparedMeeting.setInProgress(true);
 			mTextEndingTime.setText(String.format("%02d", hourOfDay) + " : " + String.format("%02d", minute));
 			mEndOn = true;
 			mEndDate.set(Calendar.HOUR_OF_DAY, mEndHour);
@@ -365,6 +359,33 @@ public class NewMeetingFragment extends Fragment implements DatePickerDialog.OnD
 
 	@OnClick(R.id.button)
 	void chooseAttendees() {
+		prepareMeeting();
+		mCheckStop = true;
+		AttendeesCheckListFragment fragment = new AttendeesCheckListFragment();
+		((MainActivity) Objects.requireNonNull(getActivity())) .replaceFragment(fragment, "frags");
+	}
+
+	private void createStartDate() {
+		mStartDate.set(Calendar.YEAR, mYear);
+		mStartDate.set(Calendar.MONTH, mMonth + 1);
+		mStartDate.set(Calendar.DAY_OF_MONTH, mDayOfMonth);
+		mStartDate.set(Calendar.HOUR, mStartHour);
+		mStartDate.set(Calendar.MINUTE, mStartMinute);
+	}
+
+	private void createEndDate() {
+		mEndDate.set(Calendar.YEAR, mYear);
+		mEndDate.set(Calendar.MONTH, mMonth + 1);
+		mEndDate.set(Calendar.DAY_OF_MONTH, mDayOfMonth);
+		mEndDate.set(Calendar.HOUR, mEndHour);
+		mEndDate.set(Calendar.MINUTE, mEndMinute);
+	}
+
+	void prepareMeeting() {
+		//ArrayList<Employee> mAttendees = mApiService.getServiceMeeting().getAttendees();
+		createStartDate();
+		createEndDate();
+		int mDeleteCode = 0;
 		MeetingRoom mRoom;
 		int mX = 0;
 		int checkedRadioId = mRadioGroup1.getCheckedRadioButtonId();
@@ -408,83 +429,15 @@ public class NewMeetingFragment extends Fragment implements DatePickerDialog.OnD
 		mPreparedMeeting.setRoom(mRoom);
 		mPreparedMeeting.setSubject(Objects.requireNonNull(mEditSujet.getEditText()).getText().toString());
 		mPreparedMeeting.setInProgress(true);
-		mCheckStop = true;
-		AttendeesCheckListFragment fragment = new AttendeesCheckListFragment();
-		((MainActivity) Objects.requireNonNull(getActivity())) .replaceFragment(fragment, "frags");
-	}
-
-	private void createStartDate() {
-		mStartDate.set(Calendar.YEAR, mYear);
-		mStartDate.set(Calendar.MONTH, mMonth + 1);
-		mStartDate.set(Calendar.DAY_OF_MONTH, mDayOfMonth);
-		mStartDate.set(Calendar.HOUR, mStartHour);
-		mStartDate.set(Calendar.MINUTE, mStartMinute);
-	}
-
-	private void createEndDate() {
-		mEndDate.set(Calendar.YEAR, mYear);
-		mEndDate.set(Calendar.MONTH, mMonth + 1);
-		mEndDate.set(Calendar.DAY_OF_MONTH, mDayOfMonth);
-		mEndDate.set(Calendar.HOUR, mEndHour);
-		mEndDate.set(Calendar.MINUTE, mEndMinute);
-	}
-
-	ServiceMeeting prepareMeeting() {
-		MeetingRoom mRoom;
-		ArrayList<Employee> mAttendees = mApiService.getServiceMeeting().getAttendees();
-		createStartDate();
-		createEndDate();
-		int mDeleteCode = 0;
-		int mX = 0;
-		int checkedRadioId = mRadioGroup1.getCheckedRadioButtonId();
-		int checkedRadioId2 = mRadioGroup2.getCheckedRadioButtonId();
-		switch(checkedRadioId) {
-			case R.id.radioButton1:
-				mX = 0;
-				break;
-			case R.id.radioButton2:
-				mX = 1;
-				break;
-			case R.id.radioButton3:
-				mX = 2;
-				break;
-			case R.id.radioButton4:
-				mX = 3;
-				break;
-			case R.id.radioButton5:
-				mX = 4;
-				break;
-			default:
-				switch(checkedRadioId2) {
-					case R.id.radioButton6:
-						mX = 5;
-						break;
-					case R.id.radioButton7:
-						mX = 6;
-						break;
-					case R.id.radioButton8:
-						mX = 7;
-						break;
-					case R.id.radioButton9:
-						mX = 8;
-						break;
-					case R.id.radioButton10:
-						mX = 9;
-						break;
-				}
-		}
-		mRoom = mApiService.getMeetingRooms().get(mX);
-		mPreparedMeeting.setInProgress(false);
-		return new ServiceMeeting(mC, mStartHour, mStartMinute, mEndHour, mEndMinute, mRoom, Objects.requireNonNull(mEditSujet.getEditText()).getText().toString(), mAttendees, mDeleteCode, false);
 	}
 
 	@OnClick(R.id.button2)
 	void addMeeting() {
-		//ServiceMeeting mPreparedMeeting = prepareMeeting();
-		mStartDate.set(mPreparedMeeting.getDate().YEAR, mPreparedMeeting.getDate().MONTH,
-				mPreparedMeeting.getDate().DAY_OF_MONTH, mPreparedMeeting.getStartHour(), mPreparedMeeting.getStartMin());
-		mEndDate.set(mPreparedMeeting.getDate().YEAR, mPreparedMeeting.getDate().MONTH,
-				mPreparedMeeting.getDate().DAY_OF_MONTH, mPreparedMeeting.getEndHour(), mPreparedMeeting.getEndMin());
+		prepareMeeting();
+		//mStartDate.set(mPreparedMeeting.getDate().YEAR, mPreparedMeeting.getDate().MONTH,
+				//mPreparedMeeting.getDate().DAY_OF_MONTH, mPreparedMeeting.getStartHour(), mPreparedMeeting.getStartMin());
+		//mEndDate.set(mPreparedMeeting.getDate().YEAR, mPreparedMeeting.getDate().MONTH,
+				//mPreparedMeeting.getDate().DAY_OF_MONTH, mPreparedMeeting.getEndHour(), mPreparedMeeting.getEndMin());
 		Meeting mMeeting = new Meeting(mPreparedMeeting.getDate(), mStartDate, mEndDate, mPreparedMeeting.getRoom(),
 				mPreparedMeeting.getSubject(), mPreparedMeeting.getAttendees(),
 				mPreparedMeeting.getDeleteCode()
@@ -493,10 +446,5 @@ public class NewMeetingFragment extends Fragment implements DatePickerDialog.OnD
 		mPreparedMeeting.setInProgress(false);
 		Fragment fragment = new ListMeetingFragment();
 		((MainActivity) Objects.requireNonNull(getActivity())).replaceFragment(fragment, "frags");
-		/*getActivity().getSupportFragmentManager()
-				.beginTransaction()
-				.replace(R.id.container, fragment)
-				.addToBackStack(null)
-				.commit();*/
 	}
 }

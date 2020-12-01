@@ -13,7 +13,6 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -89,7 +88,7 @@ public class AttendeesCheckListFragment extends Fragment {
 	@Override
 	public void onStop() {
 		super.onStop();
-		Log.d(TAG, "onStop: DEBUG:");
+		Log.d(TAG, "AttendeesCheckListFrag onStop: DEBUG:");
 		//NewMeetingFragment fragment = new NewMeetingFragment();
 		//((MainActivity)getActivity()).replaceFragment(fragment, "frags");
 	}

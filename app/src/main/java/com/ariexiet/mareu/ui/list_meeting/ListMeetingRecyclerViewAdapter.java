@@ -91,11 +91,8 @@ public class ListMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ListMee
 
 	@Override
 	public void onBindViewHolder(@NonNull ListMeetingRecyclerViewAdapter.ViewHolder holder, int position) {
-		if (mMeetingsToShow == null) {
-			Log.d(TAG, "onBindViewHolder: DEBUG");
-			mMeetingsToShow = mMeetings;
-		}
-			final Meeting mMeeting = mMeetingsToShow.get(position);
+
+			final Meeting mMeeting = mMeetings.get(position);
 			String mAttendeesToText = "";
 			ArrayList<Employee> mEmployeeToText = mMeeting.getAttendees();
 			for(Employee in : mEmployeeToText) {
@@ -121,10 +118,12 @@ public class ListMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ListMee
 
 	}
 
-	public void sortItemsByDate(){
-		DialogFragment datePicker = new DatePickerFragment(mInstance);
-		datePicker.show(((FragmentActivity)mContext).getSupportFragmentManager(), "date picker");
-		Log.d(TAG, "sortItemsByDate: DEBUG");
+
+	public void sortItemsByDate(List<Meeting> meetingsByDate){
+		//mMeetings = new ArrayList<Meeting>();
+		mMeetings = meetingsByDate;
+		this.notifyDataSetChanged();
+
 	}
 
 	public void sortItemsByRoom(){
@@ -148,14 +147,16 @@ public class ListMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ListMee
 		mC.set(Calendar.MONTH, month);
 		mC.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 		mMeetingsByDate = DI.getMeetingApiService().getMeetingsByDate(mC);
-		mMeetingsToShow = mMeetingsByDate;
-		Log.d(TAG, "onDateSet: DEBUG");
-		this.notifyDataSetChanged();
+
 	}
 
 	@Override
 	public int getItemCount() {
-		return mMeetings.size();
+		if (mMeetings == null) {
+			return 0;
+		} else {
+			return mMeetings.size();
+		}
 	}
 
 }

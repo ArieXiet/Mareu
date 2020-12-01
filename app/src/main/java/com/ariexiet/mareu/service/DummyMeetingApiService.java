@@ -1,10 +1,13 @@
 package com.ariexiet.mareu.service;
 
+import android.util.Log;
+
 import com.ariexiet.mareu.model.Employee;
 import com.ariexiet.mareu.model.Meeting;
 import com.ariexiet.mareu.model.MeetingRoom;
 import com.ariexiet.mareu.model.ServiceMeeting;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -14,6 +17,7 @@ public class DummyMeetingApiService implements MeetingApiService {
 	private final List<MeetingRoom> mMeetingRooms = DummyMeetingGenerator.generateMeetingRooms();
 	private final List<Employee> mEmployees = DummyMeetingGenerator.generateEmployees();
 	private ServiceMeeting mServiceMeeting = DummyMeetingGenerator.serviceMeeting();
+	private static final String TAG = "DummyMeetingApiService";
 
 	@Override
 	public List<Meeting> getMeetings() {
@@ -50,13 +54,25 @@ public class DummyMeetingApiService implements MeetingApiService {
 
 	@Override
 	public List<Meeting> getMeetingsByDate(Calendar date) {
-		Calendar mTestStart = null;
-		Calendar mTestEnd = null;
-		mTestStart.set(date.YEAR, date.MONTH, date.DAY_OF_MONTH, 0, 1);
-		mTestEnd.set(date.YEAR, date.MONTH, date.DAY_OF_MONTH, 23, 59);
-		mMeetingsByDate = null;
+		Log.d(TAG, "getMeetingsByDate: DEBUG: " + date.getTime());
+		Calendar mTestStart = Calendar.getInstance();
+		Calendar mTestEnd = Calendar.getInstance();
+		mTestStart.set(Calendar.YEAR, date.get(Calendar.YEAR));
+		mTestStart.set(Calendar.MONTH, date.get(Calendar.MONTH));
+		mTestStart.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
+		mTestStart.set(Calendar.HOUR_OF_DAY, 0);
+		mTestStart.set(Calendar.MINUTE, 1);
+		mTestEnd.set(Calendar.YEAR, date.get(Calendar.YEAR));
+		mTestEnd.set(Calendar.MONTH, date.get(Calendar.MONTH));
+		mTestEnd.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
+		mTestEnd.set(Calendar.HOUR_OF_DAY, 23);
+		mTestEnd.set(Calendar.MINUTE, 59);
+		Log.d(TAG, "getMeetingsByDate: DEBUG: " + mTestStart.getTime());
+		Log.d(TAG, "getMeetingsByDate: DEBUG: " + mTestEnd.getTime());
+		mMeetingsByDate = new ArrayList<Meeting>();
 		for (Meeting in : mMeetings) {
-			if (in.getDate().after(mTestStart) && in.getStart().before(mTestEnd)) {
+			if (in.getStart().after(mTestStart) && in.getStart().before(mTestEnd)) {
+				Log.d(TAG, "getMeetingsByDate: DEBUG: " + in.getSubject() + " " + in.getStart().getTime());
 				mMeetingsByDate.add(in);
 			}
 		}
